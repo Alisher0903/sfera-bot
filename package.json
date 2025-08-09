@@ -1,11 +1,10 @@
 {
   "scripts": {
     "dev": "nodemon --exec ts-node index.ts",
-    "build": "tsc",
     "start": "nodemon dist/index.js"
   },
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "dependencies": {
     "@types/cors": "^2.8.19",

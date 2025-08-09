@@ -1,22 +1,29 @@
-import express, { Request, Response } from 'express';
-import TelegramBot from 'node-telegram-bot-api';
-import bodyParser from 'body-parser';
-import cors from 'cors';
+import express, { Request, Response } from "express";
+import TelegramBot from "node-telegram-bot-api";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 // Telegram bot token and chat ID (replace with your own)
-const TELEGRAM_TOKEN = '8021287350:AAEE-ROVs20KeLX7vSZJEVB8LoG6UObHIXE';
-const CHAT_ID = '1517264719';
-const CHAT_ID_2 = '711189176';
+const TELEGRAM_TOKEN = "8021287350:AAEE-ROVs20KeLX7vSZJEVB8LoG6UObHIXE";
+const CHAT_ID = "1517264719";
+const CHAT_ID_2 = "711189176";
 
 // Initialize Express app
 const app = express();
 app.use(bodyParser.json());
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
-app.options('*', cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+app.options("/*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.sendStatus(204);
+});
 
 // Initialize Telegram bot
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
@@ -32,7 +39,7 @@ interface FormData {
 }
 
 // POST endpoint to receive form data
-app.post('/api/form', async (req: Request, res: Response) => {
+app.post("/api/form", async (req: Request, res: Response) => {
   const formData: FormData = req.body;
 
   // Validate required fields
@@ -44,16 +51,16 @@ app.post('/api/form', async (req: Request, res: Response) => {
   ) {
     return res
       .status(400)
-      .json({ error: 'Message, name, phone, and subject are required' });
+      .json({ error: "Message, name, phone, and subject are required" });
   }
 
   // Format the message for Telegram
   const message = `
 📬 Sizga yangi xabar bor:
 
-🏢 Kompaniya:  ${formData.company || 'Ma\'lumot yo\'q'}  
+🏢 Kompaniya:  ${formData.company || "Ma'lumot yo'q"}  
 👤 Ism:  ${formData.name}  
-📧 Email:  ${formData.email || 'Ma\'lumot yo\'q'}  
+📧 Email:  ${formData.email || "Ma'lumot yo'q"}  
 📞 Telefon:  ${formData.phone}  
 📝 Mavzu:  ${formData.subject}  
 💬 Xabar:  ${formData.message}
@@ -66,10 +73,10 @@ app.post('/api/form', async (req: Request, res: Response) => {
       bot.sendMessage(CHAT_ID_2, message),
     ]);
 
-    res.status(200).json({ message: 'Form data sent to Telegram chats' });
+    res.status(200).json({ message: "Form data sent to Telegram chats" });
   } catch (error) {
-    console.error('Error sending message to Telegram:', error);
-    res.status(500).json({ error: 'Failed to send data to Telegram' });
+    console.error("Error sending message to Telegram:", error);
+    res.status(500).json({ error: "Failed to send data to Telegram" });
   }
 });
 
@@ -80,6 +87,8 @@ app.listen(PORT, () => {
 });
 
 // Bot confirmation
-bot.on('message', msg => {
+bot.on("message", (msg) => {
   console.log(`Bot received message from ${msg.chat.id}`);
 });
+
+module.exports = app;

@@ -5,8 +5,8 @@ import cors from 'cors';
 
 // Telegram bot token and chat ID (replace with your own)
 const TELEGRAM_TOKEN = '8021287350:AAEE-ROVs20KeLX7vSZJEVB8LoG6UObHIXE';
-const CHAT_ID = '1517264719'; // me
-const CHAT_ID_2 = '711189176'; // ustoz
+const CHAT_ID = '1517264719';
+const CHAT_ID_2 = '711189176';
 
 // Initialize Express app
 const app = express();

@@ -18,12 +18,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.options("/*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.sendStatus(204);
-});
 
 // Initialize Telegram bot
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
@@ -85,10 +79,3 @@ const PORT = 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-// Bot confirmation
-bot.on("message", (msg) => {
-  console.log(`Bot received message from ${msg.chat.id}`);
-});
-
-module.exports = app;
